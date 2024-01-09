@@ -19,17 +19,16 @@ public class MainActivity extends AppCompatActivity {
         Handler handle = new Handler();
         handle.postDelayed(new Runnable() {
             public void run() {
-                SharedPreferences userPrref = getApplicationContext().getSharedPreferences("user",Context.MODE_PRIVATE);
-                boolean isLoggedIn = userPrref.getBoolean("isLoggedIn",false);
+                SharedPreferences userPref = getApplicationContext().getSharedPreferences("user",Context.MODE_PRIVATE);
+                boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
                 if(isLoggedIn){
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));
                     finish();
                 }
-                isFirstTime();
+                else{isFirstTime();}
             }
         }, 1500);
     }
-
     private void isFirstTime() {
         //kiem tra lan dau tien run app dung sharedprefereces
             SharedPreferences preferences = getApplication().getSharedPreferences("onBoard", Context.MODE_PRIVATE);
