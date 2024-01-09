@@ -6,12 +6,13 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbarHome"
         android:elevation="1dp"
         app:title=""
+        android:theme="@style/AppTheme.BottomAppBar"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -21,7 +22,7 @@
             android:textColor="@color/colorPrimary"
 
             />
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -7,5 +7,5 @@ public class Constant {
     public static final String USER =HOME+"/user/";
     public static final String REGISTER =HOME+"/register/";
     public static final String SAVE_USER_INFO =HOME+"/userInfo/";
-//    public static final String POST =HOME+"api";
+    public static final String POSTS =HOME+"/posts/";
 }
