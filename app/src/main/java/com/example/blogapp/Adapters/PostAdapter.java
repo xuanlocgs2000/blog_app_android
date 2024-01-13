@@ -1,6 +1,9 @@
 package com.example.blogapp.Adapters;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +43,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         Post post = list.get(position);
-        Picasso.get().load(Constant.URL+"storage/profiles/"+post.getUser().getPhoto()).into(holder.imgProfile);
-        Picasso.get().load(Constant.URL+"storage/posts/"+post.getPhoto()).into(holder.imgPost);
+        Log.d(TAG, "Adapter" +Constant.URL+"storage/profiles/"+post.getPhoto());
+        Picasso.get().load(post.getUser().getPhoto()).into(holder.imgProfile);
+        Picasso.get().load(post.getPhoto()).into(holder.imgPost);
         holder.txtName.setText(post.getUser().getUserName());
         holder.txtComments.setText("Xem tất cả "+ post.getComments()+" bình luận");
         holder.txtLikes.setText(post.getLikes()+"likes");

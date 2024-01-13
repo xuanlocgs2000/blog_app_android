@@ -131,7 +131,30 @@
                 android:background="#ccc"/>
 
         </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/progressLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_light"
+            android:visibility="gone">
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true" />
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/progressBar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="Đang xử lí..."
+                android:textColor="@android:color/black"
+                android:visibility="visible" />
+        </RelativeLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

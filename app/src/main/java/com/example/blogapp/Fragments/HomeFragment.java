@@ -34,14 +34,18 @@ import com.google.android.material.appbar.MaterialToolbar;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
     private View view;
-    private RecyclerView recyclerView;
-    private ArrayList<Post> arrayList;
+    public static RecyclerView recyclerView;
+    public static  ArrayList<Post> arrayList;
     private SwipeRefreshLayout swipeRefreshLayout;
     private  PostAdapter postAdapter;
     private MaterialToolbar toolbar;
@@ -77,7 +81,25 @@ public class HomeFragment extends Fragment {
         });
 
     }
+    public static String formatApiTime(String apiTime) {
+        try {
+            // Đối tượng SimpleDateFormat để parse thời gian từ chuỗi
+            SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault());
 
+            // Đối tượng SimpleDateFormat để format lại thời gian
+            SimpleDateFormat targetDateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
+
+            // Parse thời gian từ chuỗi
+            Date date = apiDateFormat.parse(apiTime);
+
+            // Format lại thời gian và trả về
+            return targetDateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Xử lý nếu có lỗi parse
+            return apiTime; // Trả về nguyên bản nếu không thể parse
+        }
+    }
     private void getPosts() {
         arrayList = new ArrayList<>();
         swipeRefreshLayout.setRefreshing(true);
@@ -93,7 +115,7 @@ public class HomeFragment extends Fragment {
                         user.setId(userObject.getInt("id"));
                         user.setUserName(userObject.getString("name"));
                         user.setPhoto(userObject.getString("image"));
-                        Log.d(TAG,userObject.getString("image")+"lol");
+                        Log.d(TAG,"link anh: "+userObject.getString("image"));
                         Post post = new Post();
                         post.setId(postObject.getInt("id"));
                         post.setUser(user);
@@ -101,6 +123,7 @@ public class HomeFragment extends Fragment {
                         post.setComments(postObject.getInt("comments_count"));
                         post.setDesc(postObject.getString("body"));
                         post.setPhoto(postObject.getString("image"));
+                        post.setTime( formatApiTime(postObject.getString("created_at")));
 
                         arrayList.add(post);
 
