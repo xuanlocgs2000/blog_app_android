@@ -1,11 +1,14 @@
 package com.example.blogapp;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +55,8 @@ public class AddPostActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView progressText;
     private RelativeLayout progressLayout;
+    private Dialog progressDialog;
+
 
     private SharedPreferences userPref;
     ActivityResultLauncher<Intent> activityResultLauncher= registerForActivityResult(
@@ -77,15 +83,18 @@ public class AddPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
-        initView();
+        init();
     }
 
-    private void initView() {
+    private void init() {
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
 
-        progressLayout = findViewById(R.id.progressLayout);
-        progressBar = findViewById(R.id.progressBar);
-        progressText =findViewById(R.id.progressText);
+//        progressLayout = findViewById(R.id.progressLayout);
+//        progressBar = findViewById(R.id.progressBar);
+//        progressText =findViewById(R.id.progressText);
+        progressDialog = new Dialog(this);
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
         btnPost = findViewById(R.id.btnAddPost);
         imagePost = findViewById(R.id.imgAddPost);
         txtChangeImage = findViewById(R.id.changeImg);
@@ -99,7 +108,6 @@ public class AddPostActivity extends AppCompatActivity {
         }
         btnPost.setOnClickListener(v->{
             if (!txtDesc.getText().toString().isEmpty()){
-//                showProgressBar();
                 post();
             }
             else{
@@ -116,10 +124,12 @@ public class AddPostActivity extends AppCompatActivity {
 
     private void post() {
 //        showProgressBar();
+        progressDialog.show();
+
         StringRequest request = new StringRequest(Request.Method.POST, Constant.POSTS, response -> {
             try {
                 JSONObject object = new JSONObject(response);
-                if (object.getBoolean("succcess")){
+                if (object.getBoolean("success")){
                     JSONObject postObject = object.getJSONObject("post");
                     JSONObject userObject = postObject.getJSONObject("user");
 
@@ -135,27 +145,29 @@ public class AddPostActivity extends AppCompatActivity {
                     post.setPhoto(postObject.getString("image"));
                     post.setComments(0);
                     post.setLikes(0);
-                    post.setTime(postObject.getString("create_at"));
-
+                    post.setTime(postObject.getString("created_at"));
+//
                     HomeFragment.arrayList.add(0,post);
-                    HomeFragment.recyclerView.getAdapter().notifyItemChanged(0);
+                    HomeFragment.recyclerView.getAdapter().notifyItemInserted(0);
                     HomeFragment.recyclerView.getAdapter().notifyDataSetChanged();
-                    Toast.makeText(this,"Đăng bài thành công", Toast.LENGTH_LONG).show();
 
-//            hideProgressBar();
+                    Toast.makeText(this,"Đăng bài thành công", Toast.LENGTH_SHORT).show();
+
 
                     finish();
-
+//
                 }
             }catch (JSONException e){
                 e.printStackTrace();
             }
-//            hideProgressBar();
+            progressDialog.dismiss();
+
 
         }, error->{
 //add token header
             error.printStackTrace();
-//            hideProgressBar();
+            progressDialog.dismiss();
+
 
         }){
             @Override
@@ -173,10 +185,11 @@ public class AddPostActivity extends AppCompatActivity {
                 HashMap<String,String> map = new HashMap<>();
                 map.put("body",txtDesc.getText().toString().trim());
                 map.put("image",bitmapToString(bitmap));
+//                map.put("user_id", String.valueOf(userPref.getInt("id", 0)));
                 return map;
             }
         };
-        RequestQueue queue= Volley.newRequestQueue(AddPostActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(AddPostActivity.this);
         queue.add(request);
 
     }
@@ -201,7 +214,7 @@ public class AddPostActivity extends AppCompatActivity {
         progressText.setVisibility(View.GONE);
     }
     public void cancelPost(){
-        super.onBackPressed();
+        finish();
     }
     public void changeImagePost(){
         Intent i  = new Intent(Intent.ACTION_PICK);
@@ -211,17 +224,17 @@ public class AddPostActivity extends AppCompatActivity {
 
 
     }
-    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode==GALLERY_CHANGE_POST&&resultCode==RESULT_OK){
-            Uri imgUri = data.getData();
-            imagePost.setImageURI(imgUri);
-            try{
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), getIntent().getData());
-
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
+//    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode,resultCode,data);
+//        if (requestCode==GALLERY_CHANGE_POST&&resultCode==RESULT_OK){
+//            Uri imgUri = data.getData();
+//            imagePost.setImageURI(imgUri);
+//            try{
+//                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), getIntent().getData());
+//
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }
