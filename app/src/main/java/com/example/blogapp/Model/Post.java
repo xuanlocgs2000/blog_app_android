@@ -4,6 +4,11 @@ public class Post {
     private int id, likes, comments;
     private String time, desc, photo;
     private User user;
+    private boolean selfLike;
+
+
+    public Post() {
+    }
 
     public int getId() {
         return id;
@@ -60,9 +65,14 @@ public class Post {
     public void setUser(User user) {
         this.user = user;
     }
+    public boolean isSelfLike() {
+        return selfLike;
+    }
+
+    public void setSelfLike(boolean selfLike) {
+        this.selfLike = selfLike;
+    }
 //    private boolean selfLike;
 
-    public Post() {
-    }
 
 }

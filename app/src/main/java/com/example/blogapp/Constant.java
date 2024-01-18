@@ -8,5 +8,8 @@ public class Constant {
     public static final String REGISTER =HOME+"/register/";
     public static final String SAVE_USER_INFO =HOME+"/userInfo/";
     public static final String POSTS =HOME+"/posts/";
+    public static final String UPDATE_POST =HOME+"/posts/";
+    public static final String DELETE_POST =HOME+"/posts/";
+    public static final String LIKE_POST =HOME+"/posts/likes/";
 //    public static final String ADD_POST =POSTS+"/create/";
 }

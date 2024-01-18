@@ -173,6 +173,7 @@ public class SignInFragment extends Fragment {
                        SharedPreferences.Editor editor = userPref.edit();
                        editor.putString("token",object.getString("token"));
                        editor.putString("name",user.getString("name"));
+                       editor.putInt("id",user.getInt("id"));
                        editor.putString("image",user.getString("image"));
                        editor.putBoolean("isLoggedIn",true);
                        editor.apply();
